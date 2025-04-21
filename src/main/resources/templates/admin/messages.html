@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <style>
+        .message-content-preview {
+            max-width: 300px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        
+        .role-badge-user {
+            background-color: #6c757d;
+        }
+        
+        .role-badge-assistant {
+            background-color: #0d6efd;
+        }
+    </style>
+</head>
+<body>
+    <div th:fragment="content">
+        <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-4 border-bottom page-header">
+            <h1 class="h2"><i class="bi bi-chat-dots-fill"></i> 消息管理</h1>
+            <div class="btn-toolbar mb-2 mb-md-0">
+                <div class="btn-group me-2">
+                    <button type="button" class="btn btn-sm btn-outline-secondary" onclick="window.location.reload();">
+                        <i class="bi bi-arrow-clockwise"></i> 刷新
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <div class="d-flex justify-content-between align-items-center">
+                    <span><i class="bi bi-list-ul"></i> 消息列表</span>
+                    <span class="badge bg-primary rounded-pill" th:text="${messages.size() + ' 条消息'}">0 条消息</span>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-striped table-sm">
+                        <thead>
+                            <tr>
+                                <th>消息ID</th>
+                                <th>对话ID</th>
+                                <th>用户</th>
+                                <th>角色</th>
+                                <th>创建时间</th>
+                                <th>内容</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="message : ${messages}">
+                                <td th:text="${message.messageId}">msg1</td>
+                                <td>
+                                    <a th:if="${message.chat != null}" th:href="@{'/api/admin/chats/' + ${message.chat.chatId}}" class="badge bg-info text-decoration-none">
+                                        <i class="bi bi-chat-text"></i>
+                                        <span th:text="${message.chat.chatId}">chat123</span>
+                                    </a>
+                                    <span th:if="${message.chat == null}" class="badge bg-secondary">未知</span>
+                                </td>
+                                <td>
+                                    <a th:if="${message.chat != null && message.chat.user != null}" 
+                                       th:href="@{'/api/admin/users/' + ${message.chat.user.id}}" 
+                                       class="badge bg-primary text-decoration-none">
+                                        <i class="bi bi-person-circle"></i>
+                                        <span th:text="${message.chat.user.username}">default_user</span>
+                                    </a>
+                                    <span th:if="${message.chat == null || message.chat.user == null}" class="badge bg-secondary">未知</span>
+                                </td>
+                                <td>
+                                    <span th:class="${'badge role-badge-' + message.role}" th:text="${message.role}">user</span>
+                                </td>
+                                <td th:text="${#temporals.format(message.createTime, 'yyyy-MM-dd HH:mm:ss')}">2023-01-01 00:00:00</td>
+                                <td>
+                                    <div class="message-content-preview" th:text="${#strings.abbreviate(message.content, 50)}">消息内容...</div>
+                                </td>
+                                <td>
+                                    <a th:if="${message.chat != null}" th:href="@{'/api/admin/chats/' + ${message.chat.chatId}}" class="btn btn-sm btn-primary">
+                                        <i class="bi bi-eye"></i> 查看对话
+                                    </a>
+                                </td>
+                            </tr>
+                            <tr th:if="${messages.empty}">
+                                <td colspan="7" class="text-center">暂无消息记录</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,43 @@
+version: '3.8'
+
+services:
+  app:
+    image: wkqw/ai_mysql-app:latest
+    container_name: ai-mysql-app
+    ports:
+      - "8090:8090"
+    depends_on:
+      - db
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:mysql://db:3306/ai_mysql?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai&useSSL=false&allowPublicKeyRetrieval=true
+      - SPRING_DATASOURCE_USERNAME=root
+      - SPRING_DATASOURCE_PASSWORD=root
+    networks:
+      - ai-mysql-network
+    restart: always
+
+  db:
+    image: mysql:8.0
+    container_name: ai-mysql-db
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=ai_mysql
+      - MYSQL_USER=user
+      - MYSQL_PASSWORD=password
+    ports:
+      - "3307:3306"
+    volumes:
+      - mysql-data:/var/lib/mysql
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - ai-mysql-network
+    restart: always
+    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+
+volumes:
+  mysql-data:
+    name: ai-mysql-volume
+
+networks:
+  ai-mysql-network:
+    driver: bridge 

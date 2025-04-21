@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+</head>
+<body>
+    <div th:fragment="content">
+        <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-4 border-bottom page-header">
+            <h1 class="h2"><i class="bi bi-speedometer2"></i> 仪表盘</h1>
+            <div class="btn-toolbar mb-2 mb-md-0">
+                <div class="btn-group me-2">
+                    <button type="button" class="btn btn-sm btn-outline-secondary" onclick="window.location.reload();">
+                        <i class="bi bi-arrow-clockwise"></i> 刷新
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-4">
+                <div class="card text-white bg-primary mb-4">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <span><i class="bi bi-people-fill"></i> 用户数量</span>
+                        <span class="badge bg-light text-primary rounded-pill" th:text="${userCount}">0</span>
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title" th:text="${userCount}">0</h5>
+                        <p class="card-text">系统中的用户总数</p>
+                        <a href="/api/admin/users" class="btn btn-light">
+                            <i class="bi bi-eye"></i> 查看详情
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card text-white bg-success mb-4">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <span><i class="bi bi-chat-square-text-fill"></i> 对话数量</span>
+                        <span class="badge bg-light text-success rounded-pill" th:text="${chatCount}">0</span>
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title" th:text="${chatCount}">0</h5>
+                        <p class="card-text">系统中的对话总数</p>
+                        <a href="/api/admin/chats" class="btn btn-light">
+                            <i class="bi bi-eye"></i> 查看详情
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card text-white bg-info mb-4">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <span><i class="bi bi-chat-dots-fill"></i> 消息数量</span>
+                        <span class="badge bg-light text-info rounded-pill" th:text="${messageCount}">0</span>
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title" th:text="${messageCount}">0</h5>
+                        <p class="card-text">系统中的消息总数</p>
+                        <a href="/api/admin/messages" class="btn btn-light">
+                            <i class="bi bi-eye"></i> 查看详情
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row mt-4">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <i class="bi bi-info-circle"></i> 系统信息
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <p><strong><i class="bi bi-hdd"></i> 操作系统:</strong> <span th:text="${osName != null ? osName : '未知'}">Windows</span></p>
+                                <p><strong><i class="bi bi-cpu"></i> Java版本:</strong> <span th:text="${javaVersion != null ? javaVersion : '未知'}">17</span></p>
+                            </div>
+                            <div class="col-md-6">
+                                <p><strong><i class="bi bi-clock"></i> 服务器时间:</strong> <span th:text="${#dates.format(new java.util.Date(), 'yyyy-MM-dd HH:mm:ss')}">2023-01-01 00:00:00</span></p>
+                                <p><strong><i class="bi bi-server"></i> 应用名称:</strong> <span>AI MySQL 管理系统</span></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
